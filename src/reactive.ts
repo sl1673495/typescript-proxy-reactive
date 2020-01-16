@@ -12,7 +12,7 @@ export function reactive<T extends Raw>(raw: T): T {
   // 如果这个原始对象已经被定义过响应式 就返回存储的响应式proxy
   const existProxy = rawToProxy.get(raw)
   if (existProxy) {
-    return existProxy
+    return existProxy as T
   }
 
   // 新建响应式proxy
