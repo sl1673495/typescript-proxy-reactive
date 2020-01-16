@@ -1,7 +1,8 @@
 import { reactive, observe } from "@/index"
 
-const data = reactive({ a: 1 })
+const data = reactive({ a: 1, b: { c: 2 } })
+observe(() => console.log(data.b.c))
 
-observe(() => data.a)
+data.b.c = 5
 
-data.a = 2
+window.data = data

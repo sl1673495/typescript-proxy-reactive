@@ -1,6 +1,6 @@
 import { runReactionWrap } from '@/reaction'
 import { ReactionFunction } from 'types'
-import { releaseReaction } from './store'
+import { releaseReaction } from '@/store'
 
 const IS_REACTION = Symbol('is reaction')
 
@@ -19,6 +19,12 @@ export function observe(fn: Function): ReactionFunction {
   const reaction: ReactionFunction = (...args: any[]) => {
     return runReactionWrap(reaction, fn, this, args)
   }
+
+  // 先执行一遍reaction
+  reaction()
+
+  // 返回出去 让外部也可以手动调用
+  return reaction
 }
 
 /** 停止观察函数 */

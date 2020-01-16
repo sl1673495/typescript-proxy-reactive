@@ -6,10 +6,12 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "importHelpers": true,
+    "declaration": true,
+    "declarationDir": "./dist/types/",
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
     },
     "allowSyntheticDefaultImports": true,
     "noImplicitThis": false

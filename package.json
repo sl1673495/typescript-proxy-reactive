@@ -7,19 +7,24 @@
     "example": "example"
   },
   "scripts": {
-    "build": "webpack",
+    "dev": "webpack-dev-server --config webpack.dev.config.js",
+    "build": "rimraf dist && npm run build-lib & npm run build-types",
+    "build-lib": "webpack",
+    "build-types": "tsc -d --declarationDir ./dist/types",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.8.3",
-    "@babel/preset-env": "^7.8.3",
-    "@babel/preset-typescript": "^7.8.3",
-    "babel-loader": "^8.0.6",
+    "html-webpack-plugin": "^3.2.0",
+    "rimraf": "^3.0.0",
+    "ts-loader": "^6.2.1",
     "tslib": "^1.10.0",
+    "typescript": "^3.7.4",
     "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1",
+    "webpack-merge": "^4.2.2"
   }
 }
