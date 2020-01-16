@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "sourceMap": false,
+    "outDir": "./dist",
+    "target": "esnext",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "allowSyntheticDefaultImports": true,
+    "noImplicitThis": false
+  }
+}
