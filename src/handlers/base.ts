@@ -33,6 +33,12 @@ function get(target: Raw, key: Key, receiver: ReactiveProxy) {
   return result
 }
 
+/** 劫持一些遍历访问 比如Object.keys */
+function ownKeys (target: Raw) {
+  registerRunningReaction({ target, type: 'iterate' })
+  return Reflect.ownKeys(target)
+}
+
 /** 劫持set访问 触发收集到的观察函数 */
 function set(target: Raw, key: Key, value: any, receiver: ReactiveProxy) {
   // 确保原始值里不要被响应式对象污染
@@ -71,4 +77,5 @@ function isObject(val: any): val is object {
 export default {
   get,
   set,
+  ownKeys
 }

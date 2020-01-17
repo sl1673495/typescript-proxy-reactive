@@ -5,7 +5,7 @@ export type Key = string | number | symbol
 export type Raw = object
 
 // 定义成响应式后的proxy
-export type ReactiveProxy = Raw
+export type ReactiveProxy = object
 
 // 收集响应依赖的的函数
 export type ReactionFunction = Function & {
@@ -22,8 +22,8 @@ export type ReactionForKey = Set<ReactionFunction>
 // 操作符 用来做依赖收集和触发依赖更新
 export interface Operation {
   type: "get" | "iterate" | "add" | "set" | "delete" | "clear"
-  key: Key
   target: object
+  key?: Key
   receiver?: any
   value?: any
   oldValue?: any
