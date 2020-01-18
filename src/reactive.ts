@@ -1,11 +1,11 @@
-import { proxyToRaw, rawToProxy } from "@/internals"
-import baseHandlers from "@/handlers/base"
+import { proxyToRaw, rawToProxy, shouldInstrument } from "@/internals"
+import { getHandlers } from "@/handlers"
 import { Raw, ReactiveProxy } from "types"
 import { storeObservable } from "@/store"
 
 export function reactive<T extends Raw>(raw: T): T {
-  // 已经被定义成响应式proxy了 就直接返回
-  if (proxyToRaw.has(raw)) {
+  // 已经被定义成响应式proxy了 或者传入的是内置对象 就直接原封不动的返回
+  if (proxyToRaw.has(raw) || !shouldInstrument(raw)) {
     return raw
   }
 
@@ -20,7 +20,7 @@ export function reactive<T extends Raw>(raw: T): T {
 }
 
 function createReactive<T extends Raw>(raw: T): T {
-  const reactive = new Proxy(raw, baseHandlers)
+  const reactive = new Proxy(raw, getHandlers(raw))
 
   // 双向存储原始值和响应式proxy的映射
   rawToProxy.set(raw, reactive)

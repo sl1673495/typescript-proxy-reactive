@@ -12,7 +12,6 @@ const wellKnownSymbols = new Set(
 
 /** 劫持get访问 收集依赖 */
 function get(target: Raw, key: Key, receiver: ReactiveProxy) {
-  debugger
   const result = Reflect.get(target, key, receiver)
   // 内置的Symbol不观察
   if (typeof key === "symbol" && wellKnownSymbols.has(key)) {
@@ -87,7 +86,7 @@ function deleteProperty (target: Raw, key: Key) {
   return result
 }
 
-export default {
+export const baseHandlers = {
   get,
   set,
   ownKeys,
