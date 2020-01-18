@@ -1,7 +1,7 @@
 import { reactive, observe, unobserve } from "@/index"
 
-const data: any = reactive({ a: 1, b: { c: 2 }, [Symbol('a')]: 'a' })
-observe(() => console.log( Reflect.ownKeys(data)))
-data.d = 5
+const data = reactive({a: 1})
+observe(() => console.log('keys', Object.keys(data)))
 
+delete data.a
 window.data = data

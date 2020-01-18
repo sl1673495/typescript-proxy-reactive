@@ -1,4 +1,4 @@
-import { proxyToRaw, rawToProxy } from "@/internals"
+import { proxyToRaw, rawToProxy, isObject } from "@/internals"
 import { registerRunningReaction, queueReactionsForOperation } from "@/reaction"
 import { Raw, Key, ReactiveProxy } from "types"
 import { reactive } from "@/reactive"
@@ -12,6 +12,7 @@ const wellKnownSymbols = new Set(
 
 /** 劫持get访问 收集依赖 */
 function get(target: Raw, key: Key, receiver: ReactiveProxy) {
+  debugger
   const result = Reflect.get(target, key, receiver)
   // 内置的Symbol不观察
   if (typeof key === "symbol" && wellKnownSymbols.has(key)) {
@@ -34,8 +35,8 @@ function get(target: Raw, key: Key, receiver: ReactiveProxy) {
 }
 
 /** 劫持一些遍历访问 比如Object.keys */
-function ownKeys (target: Raw) {
-  registerRunningReaction({ target, type: 'iterate' })
+function ownKeys(target: Raw) {
+  registerRunningReaction({ target, type: "iterate" })
   return Reflect.ownKeys(target)
 }
 
@@ -51,10 +52,10 @@ function set(target: Raw, key: Key, value: any, receiver: ReactiveProxy) {
   const oldValue = target[key]
   // 设置新值
   const result = Reflect.set(target, key, value, receiver)
-  
+
   if (!hadKey) {
     // 新增key值时触发观察函数
-    queueReactionsForOperation({ target, key, value, receiver, type: 'add' })
+    queueReactionsForOperation({ target, key, value, receiver, type: "add" })
   } else if (value !== oldValue) {
     // 已存在的key的值发生变化时触发观察函数
     queueReactionsForOperation({
@@ -63,19 +64,32 @@ function set(target: Raw, key: Key, value: any, receiver: ReactiveProxy) {
       value,
       oldValue,
       receiver,
-      type: 'set'
+      type: "set",
     })
   }
 
   return result
 }
 
-function isObject(val: any): val is object {
-  return typeof val === "object" && val !== "null"
+/** 劫持删除操作 触发收集到的观察函数 */
+function deleteProperty (target: Raw, key: Key) {
+  // 先检查一下是否存在这个key
+  const hadKey = hasOwnProperty.call(target, key)
+  // 拿到旧值
+  const oldValue = target[key]
+  // 删除这个属性
+  const result = Reflect.deleteProperty(target, key)
+  // 只有这个key存在的时候才触发更新
+  if (hadKey) {
+    // type为delete的话 会触发遍历相关的观察函数更新
+    queueReactionsForOperation({ target, key, oldValue, type: 'delete' })
+  }
+  return result
 }
 
 export default {
   get,
   set,
-  ownKeys
+  ownKeys,
+  deleteProperty,
 }
