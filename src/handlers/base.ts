@@ -1,9 +1,8 @@
-import { proxyToRaw, rawToProxy, isObject } from "@/internals"
+import { proxyToRaw, rawToProxy, isObject, hasOwnProperty } from "@/internals"
 import { registerRunningReaction, queueReactionsForOperation } from "@/reaction"
 import { Raw, Key, ReactiveProxy } from "types"
 import { reactive } from "@/reactive"
 
-const hasOwnProperty = Object.prototype.hasOwnProperty
 const wellKnownSymbols = new Set(
   Object.getOwnPropertyNames(Symbol)
     .map(key => Symbol[key])
@@ -53,10 +52,10 @@ function set(target: Raw, key: Key, value: any, receiver: ReactiveProxy) {
   const result = Reflect.set(target, key, value, receiver)
 
   if (!hadKey) {
-    // 新增key值时触发观察函数
+    // 新增key值时以type: add触发观察函数
     queueReactionsForOperation({ target, key, value, receiver, type: "add" })
   } else if (value !== oldValue) {
-    // 已存在的key的值发生变化时触发观察函数
+    // 已存在的key的值发生变化时以type: set触发观察函数
     queueReactionsForOperation({
       target,
       key,

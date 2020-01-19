@@ -1,7 +1,11 @@
 import { reactive, observe, unobserve } from "@/index"
 
-const data = reactive({a: 1})
-observe(() => console.log('keys', Object.keys(data)))
+const data = reactive(new Map([['a', 1]]))
+observe(() => {
+  for (let [key, val] of data) {
+    console.log(key, val)
+  }
+})
 
-delete data.a
+data.set('b', 5)
 window.data = data

@@ -20,3 +20,5 @@ export function shouldInstrument({ constructor }: Raw) {
     globalObj[constructor.name] === constructor
   return !isBuiltIn || handlers.has(constructor)
 }
+
+export const hasOwnProperty = Object.prototype.hasOwnProperty

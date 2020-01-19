@@ -21,10 +21,11 @@ export type ReactionForKey = Set<ReactionFunction>
 
 // 操作符 用来做依赖收集和触发依赖更新
 export interface Operation {
-  type: "get" | "iterate" | "add" | "set" | "delete" | "clear"
+  type: "get" | "iterate" | "add" | "set" | "delete" | "clear" | "has"
   target: object
   key?: Key
   receiver?: any
   value?: any
   oldValue?: any
 }
+
