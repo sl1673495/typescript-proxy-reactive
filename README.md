@@ -2,10 +2,10 @@
 笔者最近在浏览React状态管理库的时候，发现了一些响应式的状态管理库如
 `hodux`,`react-easy-state`，内部有一个基于proxy实现响应式的基础仓库`observer-util`，它的代码实现和Vue3中的响应式原理非常相似，这篇文章就从这个仓库入手，一步一步带你剖析响应式的实现。  
 
-本文的代码是我参考`observer-util`用ts的重写的，并且会加上非常详细的注释。
-
-第二篇传送门：
+第二篇传送门：  
 [TypeScript从零实现基于Proxy的响应式库 基于函数劫持实现Map和Set的响应式](https://github.com/sl1673495/blogs/issues/31)
+
+本文的代码是我参考`observer-util`用ts的重写的，并且会加上非常详细的注释。
 
 阅读本文可能需要的一些前置知识：
 
